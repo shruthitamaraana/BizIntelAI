@@ -90,29 +90,34 @@ BizIntel-AI/
 │── data/
 │── requirements.txt
 │── README.md
-⚙️ Installation
+---
+##⚙️ Installation
+
 git clone https://github.com/your-username/BizIntel-AI.git
 cd BizIntel-AI
 pip install -r requirements.txt
 python app.py
-▶️ Usage
+---
+##▶️ Usage
 Upload or connect your dataset
 View dashboards and analytics
 Get predictions and insights
 Interact using natural language
-🚀 Future Enhancements
+---
+###🚀 Future Enhancements
 Advanced deep learning models
 Real-time data streaming
 AI chatbot with LLM integration
 Role-based access control
-🤝 Contribution
+---
+###🤝 Contribution
 
 Contributions are welcome! Feel free to fork the repo and submit a pull request.
-
-📜 License
+---
+###📜 License
 
 This project is licensed under the MIT License.
-
-👩‍💻 Author
+---
+### 👩‍💻 Author
 
 Sruthi Tamaraana
