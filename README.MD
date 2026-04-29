@@ -117,13 +117,18 @@ Role-based access control
 ```
 ---
 ## 🤝 Contribution
-
+```bash
 Contributions are welcome! Feel free to fork the repo and submit a pull request.
+```
 ---
 ## 📜 License
+```bash
 
 This project is licensed under the MIT License.
+```
 ---
 ## 👩‍💻 Author
+```bash
 
 Sruthi Tamaraana
+```
