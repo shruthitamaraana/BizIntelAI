@@ -48,7 +48,36 @@ BizIntel AI solves this by automating analysis, predicting outcomes, and enablin
 <p align="center">
   <img src="1.png" width="700"/>
 </p>
-
+<p align="center">
+  <img src="2.png" width="200"/>
+</p>
+<p align="center">
+  <img src="3.png" width="200"/>
+</p>
+<p align="center">
+  <img src="4.png" width="200"/>
+</p>
+<p align="center">
+  <img src="5.png" width="200"/>
+</p>
+<p align="center">
+  <img src="6.png" width="200"/>
+</p>
+<p align="center">
+  <img src="7.png" width="200"/>
+</p>
+<p align="center">
+  <img src="8.png" width="200"/>
+</p>
+<p align="center">
+  <img src="9.png" width="200"/>
+</p>
+<p align="center">
+  <img src=10.png" width="200"/>
+</p>
+<p align="center">
+  <img src="11.png" width="200"/>
+</p>
 ---
 
 ## 📂 Project Structure
