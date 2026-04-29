@@ -46,7 +46,7 @@ BizIntel AI solves this by automating analysis, predicting outcomes, and enablin
 
 ## 📸 Screenshots
 <p align="center">
-  <img src="dashboard.png" width="700"/>
+  <img src="1.png" width="200"/>
 </p>
 
 ---
