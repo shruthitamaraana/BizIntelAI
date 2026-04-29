@@ -1,7 +1,7 @@
 # 🚀 BizIntel AI – Intelligent Business Decision Support System
 
 <p align="center">
-  <img src="dashboard.png" width="700"/>
+  <img src="dashboard2.png" width="700"/>
 </p>
 
 ---
