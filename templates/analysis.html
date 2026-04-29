@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Analysis | BizIntel AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --border-color: #e2e8f0;
+            --nav-height: 75px;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow-x: hidden;
+    overflow-y: auto;
+            background-color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* --- SYNCHRONIZED NAVBAR (Same as Reports Page) --- */
+        .top-nav {
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+        }
+        .visual-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px;
+}
+
+        .nav-brand { font-weight: 800; font-size: 1.5rem; text-decoration: none; color: #000; }
+        
+        /* Matching the centered-link style from reports */
+        .nav-links { display: flex; gap: 30px; margin-left: 50px; }
+        
+        .nav-link-item { 
+            text-decoration: none; 
+            color: #64748b; 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            transition: 0.2s; 
+        }
+        .nav-link-item:hover, .nav-link-item.active { color: var(--primary-blue); }
+
+        /* --- ANALYSIS LAYOUT --- */
+        .analysis-wrapper {
+            display: flex;
+            height: calc(100vh - var(--nav-height));
+            width: 100vw;
+            margin-top: var(--nav-height);
+        }
+
+        .form-section {
+            flex: 0 0 38%;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content:  flex-start; 
+            border-right: 1px solid var(--border-color);
+            background: #fff;
+            z-index: 10;
+            height: 100%;
+    overflow-y: auto;
+        }
+
+        .visual-section {
+            flex: 1;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+            display: block;
+            visibility: hidden;
+        }
+
+        .step-content {
+            display: none;
+            max-width: 500px;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .step-indicator {
+            position: absolute;
+            top: 40px;
+            left: 80px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+        }
+
+        .form-input-huge {
+            border: none;
+            border-bottom: 2px solid var(--border-color);
+            border-radius: 0;
+            font-size: 1.6rem;
+            padding: 12px 0;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .form-input-huge:focus {
+            box-shadow: none;
+            border-color: var(--primary-blue);
+            outline: none;
+        }
+
+        /* --- Radio Selection Fix --- */
+        .domain-wrapper { display: block; cursor: pointer; }
+        .domain-wrapper input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+        .domain-option {
+            border: 2px solid #f1f5f9;
+            padding: 24px;
+            border-radius: 16px;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-weight: 700;
+            background: #fff;
+            display: block;
+            color: #475569;
+        }
+
+        .domain-option:hover {
+            border-color: var(--primary-blue);
+            background: #f0f7ff;
+        }
+
+        .domain-wrapper input[type="radio"]:checked + .domain-option {
+            background: var(--primary-blue);
+            color: #ffffff;
+            border-color: var(--primary-blue);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .visual-placeholder {
+            position: absolute;
+            top: 0; left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            background: #f8fafc;
+            transition: 0.3s;
+        }
+
+        .tag-pill {
+            background: #dbeafe;
+            color: #2563eb;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="/" class="nav-brand">BizIntel <span class="text-primary">AI</span></a>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link-item">Dashboard</a>
+            <a href="/analysis" class="nav-link-item active">New Analysis</a>
+            <a href="/reports" class="nav-link-item">Reports</a>
+            <a href="/profile" class="nav-link-item">Profile</a>
+        </div>
+        <div class="ms-auto">
+            <a href="/dashboard" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm">
+                <i class="bi bi-grid-fill me-2"></i>View Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <div class="analysis-wrapper">
+        <div class="form-section">
+            <div class="step-indicator" id="step-label">STEP 01 / 03</div>
+            
+            <form action="/analyze" method="POST" id="analysis-form">
+                <div class="step-content active" data-step="1">
+                <!-- 🔥 SEARCH BAR -->
+                 <input type="text" id="domain-search" class="form-control mb-4"  name="custom_domain">
+             
+  
+
+<!-- 🔥 DOMAIN GRID -->
+<div class="row g-3" id="domain-grid">
+
+    <!-- Existing -->
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="food">
+            <div class="domain-option">🍔 Food</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="retail">
+            <div class="domain-option">🛍️ Retail</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="tech">
+            <div class="domain-option">💻 Tech</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="education">
+            <div class="domain-option">🎓 Education</div>
+        </label>
+    </div>
+
+    <!-- 🔥 NEW DOMAINS -->
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="healthcare">
+            <div class="domain-option">🏥 Healthcare</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="fitness">
+            <div class="domain-option">💪 Fitness</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="hospitality">
+            <div class="domain-option">🏨 Hospitality</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="beauty">
+            <div class="domain-option">💄 Beauty</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="automobile">
+            <div class="domain-option">🚗 Automobile</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="realestate">
+            <div class="domain-option">🏢 Real Estate</div>
+        </label>
+    </div>
+
+    <div class="col-6">
+        <label class="domain-wrapper">
+            <input type="radio" name="domain" value="ecommerce">
+            <div class="domain-option">🛒 E-commerce</div>
+        </label>
+    </div>
+
+</div>
+
+<!-- 🔥 AI SUGGESTIONS -->
+<div class="mt-4">
+    <p class="text-muted small fw-bold">AI SUGGESTED DOMAINS</p>
+
+    <div class="d-flex gap-2 flex-wrap">
+        <span class="tag-pill" onclick="selectDomain('cloud kitchen')">Cloud Kitchen</span>
+        <span class="tag-pill" onclick="selectDomain('online coaching')">Online Coaching</span>
+        <span class="tag-pill" onclick="selectDomain('mobile repair')">Mobile Repair</span>
+        <span class="tag-pill" onclick="selectDomain('gym startup')">Gym Startup</span>
+    </div>
+</div>
+<!-- CONTINUE BUTTON -->
+<div class="mt-4">
+    <button type="button" class="btn btn-primary btn-lg w-100 fw-bold" onclick="nextStep()">
+        Continue
+    </button>
+</div>
+
+</div> <!-- CLOSE STEP 1 -->
+                <div class="step-content" data-step="2">
+                    <h1 class="fw-bold mb-3">Set your metrics.</h1>
+                    <p class="text-muted mb-5">Input your target investment and personal expertise.</p>
+                    <label class="small fw-bold text-primary mb-2">INVESTMENT (Rupees)</label>
+                    <input type="number" name="budget" placeholder="e.g. 10000" class="form-control form-input-huge" required>
+                    <label class="small fw-bold text-primary mb-2">YOUR SKILLS</label>
+                    <div id="tags-wrapper" class="mb-3 d-flex flex-wrap gap-2"></div>
+                    <input type="text" id="skill-input" name="skills" placeholder="Type and press Enter" class="form-control form-input-huge">
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="button" class="btn btn-outline-secondary btn-lg flex-grow-1 fw-bold" onclick="prevStep()">Back</button>
+                        <button type="button" class="btn btn-primary btn-lg flex-grow-1 fw-bold" onclick="nextStep()">Continue</button>
+                    </div>
+                </div>
+
+                <div class="step-content" data-step="3">
+                    <h1 class="fw-bold mb-3">Target Location.</h1>
+                    <p class="text-muted mb-4">Enter a city name or click the map to pinpoint your location.</p>
+                    <input type="text" name="location" id="loc-input" placeholder="e.g. Hyderabad, India" class="form-control form-input-huge" required>
+                    <label class="small fw-bold text-primary mb-2 mt-3">SEARCH RADIUS (KM)</label>
+
+<input type="number" name="radius" id="radius-input" 
+       value="2" min="1" max="20"
+       class="form-control form-input-huge"
+       placeholder="Enter radius in KM">
+                    <input type="hidden" name="latitude" id="lat-input">
+                    <input type="hidden" name="longitude" id="lng-input">
+
+                    <div class="d-flex gap-3 mt-4">
+                        <button type="button" class="btn btn-outline-secondary btn-lg flex-grow-1 fw-bold" onclick="prevStep()">Back</button>
+                        <button type="submit" class="btn btn-primary btn-lg flex-grow-1 fw-bold">Generate AI Report</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="visual-section">
+            <div id="map"></div>
+            <div class="visual-placeholder" id="placeholder-ui">
+    <div style="max-width: 400px; text-align:left;">
+        
+        <h3 class="fw-bold mb-3">AI Market Preview</h3>
+        <p class="text-muted mb-4">Your business insights will appear here dynamically.</p>
+
+        <!-- 🔥 LIVE PREVIEW CARD -->
+        <div class="p-4 rounded-4 shadow-sm bg-white mb-3">
+            <p class="small text-muted mb-1">Selected Domain</p>
+            <h5 id="preview-domain">Not selected</h5>
+        </div>
+
+        <div class="p-4 rounded-4 shadow-sm bg-white mb-3">
+            <p class="small text-muted mb-1">Investment</p>
+            <h5 id="preview-budget">$0</h5>
+        </div>
+
+        <div class="p-4 rounded-4 shadow-sm bg-white">
+            <p class="small text-muted mb-1">Location</p>
+            <h5 id="preview-location">Not selected</h5>
+            <p class="small text-muted">Radius: <span id="preview-radius">2 km</span></p>
+        </div>
+
+    </div>
+</div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+    <script>
+        let map, marker, circle;
+
+        function initAnalysisMap() {
+            if (map) return;
+            map = L.map('map').setView([20.5937, 78.9629], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            marker = L.marker([20.5937, 78.9629], { draggable: true }).addTo(map);
+
+            map.on('click', async function(e) {
+                const { lat, lng } = e.latlng;
+                updateLocationInfo(lat, lng);
+            });
+
+            marker.on('dragend', function(e) {
+                const { lat, lng } = marker.getLatLng();
+                updateLocationInfo(lat, lng);
+            });
+        }
+
+        async function updateLocationInfo(lat, lng) {
+    marker.setLatLng([lat, lng]);
+
+    document.getElementById('lat-input').value = lat;
+    document.getElementById('lng-input').value = lng;
+
+    let radius = document.getElementById("radius-input").value || 2;
+
+    // 🔥 DRAW / UPDATE CIRCLE
+    if (circle) {
+        circle.setLatLng([lat, lng]);
+        circle.setRadius(radius * 1000);
+    } else {
+        circle = L.circle([lat, lng], {
+            radius: radius * 1000,
+            color: '#2563eb',
+            fillColor: '#2563eb',
+            fillOpacity: 0.2
+        }).addTo(map);
+    }
+
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+        const data = await response.json();
+
+let address = data.address || {};
+
+// ✅ clean location logic
+let primary =
+    address.suburb ||
+    address.village ||
+    address.town ||
+    address.city ||
+    "";
+
+let secondary =
+    address.city && address.city !== primary
+        ? address.city
+        : address.state || "";
+
+let locationName = primary + (secondary ? ", " + secondary : "");
+
+// remove regional characters
+locationName = locationName.replace(/[^\x00-\x7F]/g, "");
+
+document.getElementById('loc-input').value = locationName;
+
+// 🔥 also update preview
+document.getElementById('preview-location').innerText = locationName;
+    } catch (err) {
+        console.error("Reverse Geocoding failed", err);
+    }
+}
+
+        const locInput = document.getElementById('loc-input');
+        let debounceTimer;
+        locInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(async () => {
+                const query = locInput.value;
+                if (query.length < 3) return;
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`);
+                    const data = await response.json();
+                    if (data.length > 0) {
+                        const { lat, lon } = data[0];
+                        const newPos = [parseFloat(lat), parseFloat(lon)];
+                        map.setView(newPos, 13);
+                        marker.setLatLng(newPos);
+
+                        updateLocationInfo(parseFloat(lat), parseFloat(lon));
+                        document.getElementById('lat-input').value = lat;
+                        document.getElementById('lng-input').value = lon;
+                    }
+                } catch (err) { console.error("Geocoding failed", err); }
+            }, 800);
+        });
+
+        // when user types
+document.getElementById("domain-search").addEventListener("input", function () {
+    document.getElementById("preview-domain").innerText = this.value;
+});
+
+// when user clicks domain buttons
+document.querySelectorAll(".domain-option").forEach(btn => {
+    btn.addEventListener("click", function () {
+        let value = this.innerText.replace(/[^\w\s]/gi, '').trim();
+
+        document.getElementById("domain-search").value = value;  // 🔥 important
+        document.getElementById("preview-domain").innerText = value;
+    });
+});
+
+// when user clicks AI suggestions
+document.querySelectorAll(".tag-pill").forEach(btn => {
+    btn.addEventListener("click", function () {
+        let value = this.innerText.replace(/[^\w\s]/gi, '').trim();
+
+        document.getElementById("domain-search").value = value;  // 🔥 important
+        document.getElementById("preview-domain").innerText = value;
+    });
+});
+
+        // 🔥 LIVE PREVIEW UPDATES
+
+// DOMAIN
+
+document.querySelectorAll('input[name="domain"]').forEach(el => {
+    el.addEventListener('change', () => {
+        let formatted = el.value.charAt(0).toUpperCase() + el.value.slice(1);
+document.getElementById('preview-domain').innerText = formatted;
+    });
+});
+
+// SEARCH INPUT
+document.getElementById('domain-search')?.addEventListener('input', function(){
+    document.getElementById('preview-domain').innerText = this.value || "Not selected";
+});
+
+// BUDGET
+document.querySelector('input[name="budget"]').addEventListener('input', function(){
+    document.getElementById('preview-budget').innerText = "$" + this.value;
+});
+
+// LOCATION
+document.getElementById('loc-input').addEventListener('input', function(){
+    document.getElementById('preview-location').innerText = this.value;
+});
+
+        function updateStepUI() {
+            const currentStep = document.querySelector('.step-content.active').dataset.step;
+            document.getElementById('step-label').innerText = `STEP 0${currentStep} / 03`;
+            
+            const mapDiv = document.getElementById('map');
+            const placeholder = document.getElementById('placeholder-ui');
+            
+            if (currentStep === "3") {
+                placeholder.style.opacity = "0";
+                setTimeout(() => { placeholder.style.display = "none"; }, 300);
+                mapDiv.style.visibility = "visible";
+                initAnalysisMap();
+                setTimeout(() => { map.invalidateSize(); }, 400);
+            } else {
+                placeholder.style.display = "flex";
+                setTimeout(() => { placeholder.style.opacity = "1"; }, 10);
+                mapDiv.style.visibility = "hidden";
+            }
+        }
+
+        const skillInput = document.getElementById('skill-input');
+        const tagsWrapper = document.getElementById('tags-wrapper');
+        let skills = [];
+
+        skillInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const val = skillInput.value.trim();
+                if (val && !skills.includes(val)) {
+                    skills.push(val);
+                    const tag = document.createElement('span');
+                    tag.className = 'tag-pill';
+                    tag.innerText = val;
+                    tagsWrapper.appendChild(tag);
+                }
+                skillInput.value = '';
+            }
+        });
+
+        window.nextStep = function() {
+    const current = document.querySelector('.step-content.active');
+
+    if (current.dataset.step === "1") {
+
+        let typedValue = document.getElementById("domain-search").value.trim();
+        let selectedRadio = document.querySelector('input[name="domain"]:checked');
+
+        if (!typedValue && !selectedRadio) {
+            alert("Please enter or select a business domain first!");
+            return;
+        }
+
+        // 🔥 ADD THIS BLOCK HERE
+        if (typedValue) {
+            let hidden = document.getElementById("final-domain");
+
+            if (!hidden) {
+                hidden = document.createElement("input");
+                hidden.type = "hidden";
+                hidden.name = "domain";
+                hidden.id = "final-domain";
+                document.getElementById("analysis-form").appendChild(hidden);
+            }
+
+            hidden.value = typedValue;
+        }
+
+        // 🔥 ALSO ADD THIS (for radio case)
+        if (!typedValue && selectedRadio) {
+            let hidden = document.getElementById("final-domain");
+
+            if (!hidden) {
+                hidden = document.createElement("input");
+                hidden.type = "hidden";
+                hidden.name = "domain";
+                hidden.id = "final-domain";
+                document.getElementById("analysis-form").appendChild(hidden);
+            }
+
+            hidden.value = selectedRadio.value;
+        }
+    }
+
+    const nextNum = parseInt(current.dataset.step) + 1;
+    const next = document.querySelector(`.step-content[data-step="${nextNum}"]`);
+
+    if (next) {
+        current.classList.remove('active');
+        next.classList.add('active');
+        updateStepUI();
+    }
+};
+
+        window.prevStep = function() {
+            const current = document.querySelector('.step-content.active');
+            const prevNum = parseInt(current.dataset.step) - 1;
+            const prev = document.querySelector(`.step-content[data-step="${prevNum}"]`);
+            if (prev) {
+                current.classList.remove('active');
+                prev.classList.add('active');
+                updateStepUI();
+            }
+        };
+        // 🔥 SEARCH FILTER
+document.getElementById('domain-search').addEventListener('input', function () {
+    let value = this.value.toLowerCase();
+    let items = document.querySelectorAll('#domain-grid .col-6');
+
+    items.forEach(item => {
+        let text = item.innerText.toLowerCase();
+        item.style.display = text.includes(value) ? 'block' : 'none';
+    });
+});
+
+// 🔥 AI SELECT
+function selectDomain(val) {
+    document.querySelectorAll('input[name="domain"]').forEach(r => r.checked = false);
+
+    document.getElementById('domain-search').value = val;
+    document.getElementById('preview-domain').innerText = val; // 🔥 add this
+}
+
+document.getElementById("radius-input").addEventListener("input", function () {
+    let radius = this.value;
+
+    if (circle) {
+        circle.setRadius(radius * 1000);
+    }
+});
+
+document.getElementById("radius-input").addEventListener("input", function(){
+    document.getElementById("preview-radius").innerText = this.value + " km";
+});
+
+document.getElementById('loc-input').addEventListener('input', function(){
+    document.getElementById('preview-location').innerText = this.value;
+});
+
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizIntel AI | Smart Business Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --soft-bg: #f8fafc;
+            --dark-navy: #0f172a;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            scroll-behavior: smooth;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar-custom {
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1.2rem 0;
+        }
+
+        .logo-text { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            padding: 120px 0 100px;
+            background: radial-gradient(circle at 90% 10%, rgba(37, 99, 235, 0.08), transparent),
+                        radial-gradient(circle at 10% 90%, rgba(124, 58, 237, 0.05), transparent);
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -3px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- HOW IT WORKS --- */
+        .step-card {
+            padding: 40px;
+            border-radius: 32px;
+            background: var(--soft-bg);
+            border: 1px solid #e2e8f0;
+            position: relative;
+            height: 100%;
+        }
+
+        .step-number {
+            font-weight: 800;
+            font-size: 4rem;
+            color: rgba(37, 99, 235, 0.1);
+            position: absolute;
+            top: 10px;
+            right: 30px;
+        }
+
+        /* --- FEATURES --- */
+        .feature-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-blue);
+        }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--primary-blue);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- FOOTER --- */
+        .footer-main {
+            background: var(--dark-navy);
+            color: #94a3b8;
+            padding: 80px 0 30px;
+        }
+
+        .footer-title { color: #ffffff; font-weight: 700; margin-bottom: 25px; }
+        .footer-link { color: #94a3b8; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 12px; }
+        .footer-link:hover { color: #ffffff; padding-left: 5px; }
+
+        .btn-primary-custom {
+            background: var(--primary-blue);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-weight: 700;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-primary-custom:hover {
+            background: #1d4ed8;
+            box-shadow: 0 12px 20px -5px rgba(37, 99, 235, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand logo-text text-dark" href="/">
+                BizIntel <span class="text-primary">AI</span>
+            </a>
+            <div class="ms-auto d-flex align-items-center gap-4">
+                <a href="/login" class="text-dark fw-bold text-decoration-none small">Sign In</a>
+                <a href="/register" class="btn btn-primary-custom px-4 py-2 small">Try for Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="container text-center">
+            <span class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2 fw-bold mb-4">
+                🚀 Now powered by 2026 Market Data
+            </span>
+            <h1 class="hero-title mx-auto" style="max-width: 1000px;">
+                Intelligence to <span>Scale</span> <br>Your Business Idea
+            </h1>
+            <p class="lead text-muted mb-5 mx-auto" style="max-width: 650px; font-size: 1.25rem;">
+                Eliminate guesswork. Use real-time geolocation, search trends, and AI sentiment analysis to validate your startup idea in seconds.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/login" class="btn btn-primary-custom btn-lg px-5 shadow">Get Started</a>
+                <a href="#how-it-works" class="btn btn-outline-dark btn-lg px-5 rounded-4">Learn More</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="how-it-works" class="py-5">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-800 display-5">How it Works</h2>
+                <p class="text-muted">Three simple steps to market clarity.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <span class="step-number">01</span>
+                        <div class="icon-circle"><i class="bi bi-geo-alt-fill"></i></div>
+                        <h4 class="fw-bold">Set Parameters</h4>
+                        <p class="text-muted">Enter your business domain (Food, Tech, Retail) and the specific city you wish to target.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <span class="step-number">02</span>
+                        <div class="icon-circle"><i class="bi bi-cpu-fill"></i></div>
+                        <h4 class="fw-bold">AI Processing</h4>
+                        <p class="text-muted">Our engine crawls OpenStreetMap for competition and Google Trends for real-time demand signals.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <span class="step-number">03</span>
+                        <div class="icon-circle"><i class="bi bi-bar-chart-fill"></i></div>
+                        <h4 class="fw-bold">Instant Insight</h4>
+                        <p class="text-muted">Receive a comprehensive feasibility index score from 0-100% to help you decide your next move.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-5">
+                    <h2 class="display-6 fw-800 mb-4">Precision Data for <br><span class="text-primary">Informed Founders</span></h2>
+                    <p class="text-muted mb-4">BizIntel AI isn't just a search tool. It's a risk mitigation engine designed for the Indian market landscape.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Real-time Competition Mapping</li>
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Sentiment Analysis on Local Reviews</li>
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Search Velocity Tracking</li>
+                    </ul>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <div class="icon-circle"><i class="bi bi-shield-lock-fill"></i></div>
+                                <h5 class="fw-bold">Verified Data</h5>
+                                <p class="small text-muted mb-0">We pull data directly from official OSM and Google APIs for maximum accuracy.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <div class="icon-circle"><i class="bi bi-lightning-charge-fill"></i></div>
+                                <h5 class="fw-bold">Instant Results</h5>
+                                <p class="small text-muted mb-0">No more waiting weeks for expensive market research reports.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-main">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <a class="navbar-brand logo-text text-white mb-3 d-block" href="#">
+                        BizIntel <span class="text-primary">AI</span>
+                    </a>
+                    <p class="small">The leading AI-powered market validation platform for entrepreneurs in India. Built to empower the next generation of startups.</p>
+                    <div class="d-flex gap-3 fs-5 mt-4">
+                        <i class="bi bi-twitter-x"></i>
+                        <i class="bi bi-linkedin"></i>
+                        <i class="bi bi-github"></i>
+                    </div>
+                </div>
+                <div class="col-md-2 offset-lg-2">
+                    <h6 class="footer-title">Platform</h6>
+                    <a href="/analysis" class="footer-link">Analyzer</a>
+                    <a href="/dashboard" class="footer-link">Dashboard</a>
+                    <a href="/reports" class="footer-link">Case Studies</a>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="footer-title">Company</h6>
+                    <a href="/about" class="footer-link">About Us</a>
+                    <a href="/careers" class="footer-link">Careers</a>
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="footer-title">Support</h6>
+                    <a href="#" class="footer-link">Help Center</a>
+                    <a href="#" class="footer-link">Contact</a>
+                    <a href="#" class="footer-link">API Docs</a>
+                </div>
+            </div>
+            <hr class="mt-5 mb-4" style="border-color: rgba(255,255,255,0.1);">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="small mb-0">&copy; 2026 BizIntel AI. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="small mb-0">Made with 💙 in India</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

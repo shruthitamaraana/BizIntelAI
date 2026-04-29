@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | BizIntel AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary-blue: #2563eb; --dark-navy: #091020; }
+        body { background-color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+        .auth-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .auth-card { background: white; padding: 40px; border-radius: 28px; border: 1px solid #e2e8f0; box-shadow: 0 15px 35px rgba(0,0,0,0.05); width: 100%; max-width: 420px; }
+        .form-control { border-radius: 14px; padding: 14px; margin-bottom: 18px; border: 1px solid #e2e8f0; }
+        .btn-auth { border-radius: 14px; padding: 14px; font-weight: 700; transition: 0.3s; }
+        
+        /* Social Buttons */
+        .btn-social { border: 1px solid #e2e8f0; border-radius: 14px; padding: 10px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; background: white; color: #1e293b; margin-bottom: 10px; }
+        .btn-social:hover { background: #f1f5f9; border-color: #cbd5e1; }
+
+        .divider { display: flex; align-items: center; text-align: center; color: #94a3b8; margin: 20px 0; font-size: 0.8rem; font-weight: 600; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e2e8f0; }
+        .divider:not(:empty)::before { margin-right: .5em; }
+        .divider:not(:empty)::after { margin-left: .5em; }
+
+        /* Footer from image */
+        .footer-main { background-color: var(--dark-navy); color: #94a3b8; padding: 60px 0 30px; margin-top: auto; }
+        .footer-link { color: #94a3b8; text-decoration: none; display: block; margin-bottom: 10px; font-size: 0.9rem; }
+        .footer-link:hover { color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-wrapper">
+        <div class="auth-card text-center">
+            <h2 class="fw-800 mb-2">
+                {% if admin_mode %}Admin <span class="text-danger">Access</span>
+                {% else %}Welcome <span class="text-primary">Back</span>{% endif %}
+            </h2>
+            <p class="text-muted small mb-4">Enter your credentials to access the platform.</p>
+
+            {% if not admin_mode %}
+            <button class="btn btn-social w-100"><i class="bi bi-google text-danger"></i> Continue with Google</button>
+            <button class="btn btn-social w-100"><i class="bi bi-github"></i> Continue with GitHub</button>
+            <div class="divider">OR USE EMAIL</div>
+            {% endif %}
+
+            <form action="{{ url_for('admin_login') if admin_mode else url_for('login') }}" method="POST">
+                <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                
+                <button type="submit" class="btn {{ 'btn-danger' if admin_mode else 'btn-primary' }} btn-auth w-100 shadow-sm">
+                    {{ 'Enter Admin Terminal' if admin_mode else 'Sign In to BizIntel' }}
+                </button>
+            </form>
+
+            <div class="mt-4">
+                {% if admin_mode %}
+                    <a href="/login" class="text-muted small text-decoration-none">Standard User? <span class="text-primary fw-bold">Login here</span></a>
+                {% else %}
+                    <a href="/register" class="text-muted small text-decoration-none">New here? <span class="text-primary fw-bold">Create Account</span></a>
+                    <hr class="my-3 opacity-10">
+                    <a href="/admin-login" class="text-primary small fw-bold text-decoration-none"><i class="bi bi-shield-lock me-1"></i>Login as Admin</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-main">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="text-white fw-800">BizIntel <span class="text-primary">AI</span></h5>
+                    <p class="small">The leading AI-powered market validation platform for entrepreneurs in India.</p>
+                </div>
+                <div class="col-6 col-md-2 offset-lg-2">
+                    <h6 class="text-white fw-700 mb-3">Platform</h6>
+                    <a href="/analysis" class="footer-link">Analyzer</a>
+                    <a href="/dashboard" class="footer-link">Dashboard</a>
+                </div>
+                <div class="col-6 col-md-2">
+                    <h6 class="text-white fw-700 mb-3">Support</h6>
+                    <a href="#" class="footer-link">Help Center</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+            <div class="mt-5 pt-3 border-top border-secondary border-opacity-10 d-flex justify-content-between small">
+                <span>© 2026 BizIntel AI. All rights reserved.</span>
+                <span>Made with 💙 in India</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

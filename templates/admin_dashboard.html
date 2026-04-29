@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | BizIntel AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root { 
+            --admin-dark: #0f172a; 
+            --primary-blue: #2563eb; 
+            --bg-muted: #f1f5f9;
+        }
+        
+        body { 
+            background-color: var(--bg-muted); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: #1e293b;
+        }
+
+        /* --- ADMIN TOP NAV --- */
+        .admin-nav {
+            background: var(--admin-dark);
+            padding: 15px 40px;
+            color: white;
+            border-bottom: 3px solid var(--primary-blue);
+        }
+
+        /* --- MONITORING CARDS --- */
+        .monitor-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .monitor-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .stat-label { font-size: 0.75rem; font-weight: 800; color: #64748b; letter-spacing: 1px; }
+        .stat-value { font-size: 2rem; font-weight: 800; margin-top: 5px; }
+
+        /* --- SYSTEM LOG TABLE --- */
+        .log-container {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .table thead th {
+            background: #f8fafc;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 15px 25px;
+            color: #64748b;
+        }
+        .table tbody td { padding: 18px 25px; vertical-align: middle; }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* --- FOOTER --- */
+        .footer-main { background: var(--admin-dark); color: #94a3b8; padding: 60px 0 30px; margin-top: 80px; }
+    </style>
+</head>
+<body>
+
+    <nav class="admin-nav d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+            <h4 class="mb-0 fw-800">BizIntel <span class="text-primary">Admin</span></h4>
+            <span class="badge bg-danger rounded-pill px-3">Live Monitoring</span>
+        </div>
+        <div class="d-flex align-items-center gap-4">
+            <a href="/dashboard" class="text-white text-decoration-none small fw-bold">User View</a>
+            <a href="/logout" class="btn btn-outline-light btn-sm rounded-pill px-4 fw-bold">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <header class="mb-5">
+            <h1 class="fw-800">Platform <span class="text-primary">Overview</span></h1>
+            <p class="text-muted">Monitoring global user activity and system API health.</p>
+        </header>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="monitor-card">
+                    <span class="stat-label text-uppercase">Total Registered</span>
+                    <div class="stat-value text-dark">1,284</div>
+                    <small class="text-success fw-bold"><i class="bi bi-graph-up-arrow"></i> +12% this week</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="monitor-card">
+                    <span class="stat-label text-uppercase">Active Analyses</span>
+                    <div class="stat-value text-primary">432</div>
+                    <small class="text-muted">Last 24 hours</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="monitor-card">
+                    <span class="stat-label text-uppercase">System Health</span>
+                    <div class="stat-value text-success">99.9%</div>
+                    <small class="text-muted">All APIs Operational</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="monitor-card">
+                    <span class="stat-label text-uppercase">Server Latency</span>
+                    <div class="stat-value text-warning">142ms</div>
+                    <small class="text-muted">Average response</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="log-container">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="fw-800 mb-0">System Activity Logs</h5>
+                <button class="btn btn-sm btn-light border fw-bold px-3">Download CSV</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>User Identifier</th>
+                            <th>Action Performed</th>
+                            <th>Target Region</th>
+                            <th>Status</th>
+                            <th class="text-end">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>USR_9921</strong><br><small class="text-muted">mutakabar@example.com</small></td>
+                            <td>Analysis Request: <span class="text-primary fw-bold">Food & Tech</span></td>
+                            <td>Hyderabad, India</td>
+                            <td><span class="status-pill bg-success-subtle text-success">SUCCESS</span></td>
+                            <td class="text-end text-muted small">Just now</td>
+                        </tr>
+                        <tr>
+                            <td><strong>USR_9844</strong><br><small class="text-muted">user2@test.com</small></td>
+                            <td>New Registration</td>
+                            <td>Bangalore, India</td>
+                            <td><span class="status-pill bg-success-subtle text-success">SUCCESS</span></td>
+                            <td class="text-end text-muted small">4 mins ago</td>
+                        </tr>
+                        <tr>
+                            <td><strong>USR_9721</strong><br><small class="text-muted">guest_88@domain.com</small></td>
+                            <td>API Access: <span class="text-danger fw-bold">Geocode</span></td>
+                            <td>Mumbai, India</td>
+                            <td><span class="status-pill bg-danger-subtle text-danger">TIMEOUT</span></td>
+                            <td class="text-end text-muted small">12 mins ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-main">
+        <div class="container">
+            <div class="row g-4 text-center text-md-start">
+                <div class="col-lg-4">
+                    <h5 class="text-white fw-800">BizIntel <span class="text-primary">AI</span></h5>
+                    <p class="small">Administrative Management Console. Authorized access only. Data refreshes every 60 seconds.</p>
+                </div>
+                <div class="col-lg-8 text-md-end">
+                    <p class="small mb-0">© 2026 BizIntel AI Global Terminal. All rights reserved.</p>
+                    <p class="small opacity-50">Made with 💙 in India</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Monitor | BizIntel AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root { --primary-blue: #2563eb; --dark-navy: #091020; }
+        body { background-color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .admin-nav { background: var(--dark-navy); color: white; padding: 15px 40px; }
+        .stat-card { background: white; border-radius: 20px; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .status-dot { height: 10px; width: 10px; background-color: #10b981; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        .footer-main { background-color: var(--dark-navy); color: #94a3b8; padding: 60px 0 30px; margin-top: 80px; }
+        .footer-link { color: #94a3b8; text-decoration: none; display: block; margin-bottom: 10px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="admin-nav d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 fw-800">BizIntel <span class="text-primary">Admin</span></h4>
+        <div class="d-flex align-items-center gap-3">
+            <span class="small opacity-75">Welcome, System Admin</span>
+            <a href="/logout" class="btn btn-outline-light btn-sm rounded-pill px-3">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="stat-card p-4">
+                    <small class="text-muted fw-bold">TOTAL USERS</small>
+                    <h2 class="fw-800 mb-0">1,284</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card p-4">
+                    <small class="text-muted fw-bold">API STATUS</small>
+                    <h2 class="fw-800 mb-0 text-success">Active</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card p-4">
+                    <small class="text-muted fw-bold">DAILY ANALYSES</small>
+                    <h2 class="fw-800 mb-0">432</h2>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card p-4">
+                    <small class="text-muted fw-bold">SERVER LOAD</small>
+                    <h2 class="fw-800 mb-0 text-primary">14%</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card stat-card p-0 overflow-hidden">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="fw-800 mb-0">Live Traffic Monitor</h5>
+                <span class="badge bg-success-subtle text-success rounded-pill"><span class="status-dot"></span> System Online</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">User ID</th>
+                            <th>Action</th>
+                            <th>Region</th>
+                            <th>Latency</th>
+                            <th class="text-end pe-4">Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4 fw-bold">USR-992</td>
+                            <td>Analysis Request: <span class="badge bg-primary-subtle text-primary">Food</span></td>
+                            <td>Hyderabad, IN</td>
+                            <td>124ms</td>
+                            <td class="text-end pe-4 text-muted">Just now</td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 fw-bold">USR-841</td>
+                            <td>New Registration</td>
+                            <td>Bangalore, IN</td>
+                            <td>88ms</td>
+                            <td class="text-end pe-4 text-muted">2 mins ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-main">
+        <div class="container text-center">
+            <p class="mb-0">© 2026 BizIntel AI Admin Terminal. Secure Access Only.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

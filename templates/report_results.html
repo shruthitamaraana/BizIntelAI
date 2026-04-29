@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Analysis Report | BizIntel AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --primary-blue: #2563eb; --bg-soft: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-soft); color: #1e293b; }
+        .report-header { background: white; border-bottom: 1px solid #e2e8f0; padding: 40px 0; }
+        .score-card { 
+            background: white; border-radius: 24px; padding: 40px; 
+            border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            text-align: center;
+        }
+        .score-circle {
+            width: 150px; height: 150px; border-radius: 50%;
+            border: 8px solid #f1f5f9; margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; font-weight: 800; color: var(--primary-blue);
+            position: relative;
+        }
+        .chart-container { background: white; border-radius: 24px; padding: 30px; border: 1px solid #e2e8f0; height: 100%; }
+        .insight-pill { background: #eff6ff; color: #2563eb; padding: 5px 15px; border-radius: 100px; font-weight: 700; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <header class="report-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <span class="badge bg-primary-subtle text-primary mb-2 px-3">CONFIDENTIAL AI ANALYSIS</span>
+                <h1 class="fw-800 mb-0">{{ domain | capitalize }} Market in {{ location }}</h1>
+            </div>
+            <button class="btn btn-outline-dark rounded-pill px-4" onclick="window.print()"><i class="bi bi-download me-2"></i>Export PDF</button>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="score-card">
+                    <div class="score-circle">
+                        {{ score }}%
+                    </div>
+                    <h4 class="fw-800">Feasibility Score</h4>
+                    <p class="text-muted small">Based on search velocity, density, and investment risk.</p>
+                    <hr class="my-4 opacity-10">
+                    <div class="text-start">
+                        <h6 class="fw-bold mb-3 text-primary">AI VERDICT</h6>
+                        <p class="small fw-600">{{ verdict }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="chart-container">
+                    <h5 class="fw-800 mb-4">Market Breakdown</h5>
+                    <canvas id="marketChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-2">
+            <div class="col-md-4">
+                <div class="p-4 bg-white border rounded-4">
+                    <i class="bi bi-people text-primary fs-3"></i>
+                    <h6 class="mt-3 fw-bold">Target Audience</h6>
+                    <p class="small text-muted mb-0">High demand detected within 5km radius.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-white border rounded-4">
+                    <i class="bi bi-shield-check text-success fs-3"></i>
+                    <h6 class="mt-3 fw-bold">Risk Level</h6>
+                    <p class="small text-muted mb-0">Low saturation in current neighborhood.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-white border rounded-4">
+                    <i class="bi bi-currency-dollar text-warning fs-3"></i>
+                    <h6 class="mt-3 fw-bold">Est. ROI</h6>
+                    <p class="small text-muted mb-0">Positive cash flow projected in 14 months.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const ctx = document.getElementById('marketChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Local Demand', 'Competition', 'Investment Fit', 'Sentiment'],
+                datasets: [{
+                    label: 'Score %',
+                    data: [{{ demand }}, {{ competition }}, {{ budget_fit }}, {{ sentiment }}],
+                    backgroundColor: ['#2563eb', '#f87171', '#fbbf24', '#34d399'],
+                    borderRadius: 10
+                }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+    </script>
+</body>
+</html>

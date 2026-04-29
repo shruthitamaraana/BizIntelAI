@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>Analyzing Market... | BizIntel AI</title>
+</head>
+<body>
+    <div class="loader-container">
+        <div class="spinner"></div>
+        <h2 class="mt-4">BizIntel AI is Thinking...</h2>
+        <div id="loading-steps" class="mt-3">
+            <p class="step-msg">📍 Fetching location coordinates...</p>
+            <p class="step-msg d-none">🕵️ Scanning nearby competitors...</p>
+            <p class="step-msg d-none">📉 Checking Google search demand...</p>
+            <p class="step-msg d-none">💬 Processing public sentiment...</p>
+        </div>
+    </div>
+    
+    <script>
+        const msgs = document.querySelectorAll('.step-msg');
+        let i = 0;
+        setInterval(() => {
+            msgs[i].classList.add('d-none');
+            i = (i + 1) % msgs.length;
+            msgs[i].classList.remove('d-none');
+        }, 2000);
+    </script>
+</body>
+</html>

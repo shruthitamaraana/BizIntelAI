@@ -1,0 +1,5 @@
+Flask==3.0.0
+geopy==2.4.1
+requests==2.31.0
+pytrends==4.9.2
+nltk==3.8.1

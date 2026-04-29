@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Market Intelligence | BizIntel.AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --nav-height: 75px;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #1e293b;
+            font-size: 16px;
+        }
+
+        /* --- Navbar Styles --- */
+        .top-nav {
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .nav-brand { font-weight: 800; font-size: 1.5rem; text-decoration: none; color: #000; }
+        .nav-links { display: flex; gap: 30px; margin-left: 50px; }
+        .nav-link-item { text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.95rem; transition: 0.2s; }
+        .nav-link-item:hover { color: var(--primary-blue); }
+
+        /* --- Layout Adjustments --- */
+        .report-wrapper {
+            display: flex;
+            height: calc(100vh - var(--nav-height));
+            width: 100vw;
+            margin-top: var(--nav-height);
+        }
+
+        /* --- Sidebar Summary --- */
+        .summary-sidebar {
+            flex: 0 0 30%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+            overflow-y: auto;
+        }
+
+        .analytics-main {
+            flex: 1;
+            background: var(--bg-light);
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        /* --- Score Gauge (conic-gradient) --- */
+        .score-display-container {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .score-circle {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            background: conic-gradient(
+                {{ f_col }} {{ final_score }}%, 
+                #f1f5f9 {{ final_score }}%
+            );
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .score-circle::before {
+            content: "";
+            position: absolute;
+            width: 135px;
+            height: 135px;
+            background: #ffffff;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .score-circle h1 {
+            position: relative;
+            z-index: 2;
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -1.5px;
+            margin: 0;
+        }
+
+        /* --- Component Styles --- */
+        .stat-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            height: 100%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .insight-highlight {
+            background: #eff6ff;
+            border-left: 6px solid var(--primary-blue);
+            padding: 25px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .jd-link-card {
+            background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);
+            color: white !important;
+            padding: 25px 35px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            margin-top: 10px;
+            transition: transform 0.2s ease;
+        }
+        .jd-link-card:hover { transform: scale(1.01); }
+
+        .progress-custom {
+            height: 12px;
+            border-radius: 10px;
+            background: #e2e8f0;
+        }
+
+        .pill-badge {
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        @media print {
+            .top-nav, .summary-sidebar, .jd-link-card, .btn-print-hide { display: none !important; }
+            .report-wrapper { margin-top: 0; display: block; }
+            .analytics-main { width: 100%; padding: 0; background: white; }
+            .stat-card { border: 1px solid #ccc; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+    {# Color Logic for Score #}
+    {% if final_score < 40 %} {% set f_col = "#ef4444" %}
+    {% elif final_score < 70 %} {% set f_col = "#f59e0b" %}
+    {% else %} {% set f_col = "#10b981" %} {% endif %}
+
+    <nav class="top-nav btn-print-hide">
+        <a href="/" class="nav-brand">BizIntel <span class="text-primary">AI</span></a>
+        <div class="nav-links">
+            <a href="/dashboard" class="nav-link-item">Dashboard</a>
+            <a href="/analysis" class="nav-link-item">New Analysis</a>
+            <a href="/reports" class="nav-link-item">Reports</a>
+            <a href="/profile" class="nav-link-item">Profile</a>
+        </div>
+        <div class="ms-auto">
+            <a href="/dashboard" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold shadow-sm">
+                <i class="bi bi-grid-fill me-2"></i>View Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <div class="report-wrapper">
+        <aside class="summary-sidebar">
+            <a href="/analysis" class="text-decoration-none text-muted fw-bold mb-4 d-inline-block small btn-print-hide">
+                <i class="bi bi-arrow-left me-2"></i> NEW ANALYSIS
+            </a>
+            
+            <div class="mb-5">
+                <span class="text-primary fw-bold small text-uppercase tracking-wider" style="letter-spacing: 2px;">AI Analysis Result</span>
+                <h1 class="fw-800 mt-2" style="font-size: 2rem;">BizIntel <span class="text-primary">AI</span></h1>
+            </div>
+
+            <div class="mb-4 p-4 bg-white border rounded-4 shadow-sm">
+                <label class="text-muted fw-800 mb-2 small text-uppercase">Target Location</label>
+                <p class="fs-5 fw-600 mb-1"><i class="bi bi-geo-alt text-primary me-2"></i>{{ location }}</p>
+                <p class="text-muted small mb-0">{{ latitude }}, {{ longitude }}</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="text-muted fw-800 small text-uppercase">Business Domain</label>
+                <p class="fs-5 fw-600 mt-1"><i class="bi bi-briefcase text-primary me-2"></i>{{ domain }}</p>
+            </div>
+
+            <div class="mb-4">
+                <label class="text-muted fw-800 small text-uppercase">Investment</label>
+                <p class="fs-5 fw-600 mt-1">${{ budget }}</p>
+            </div>
+
+            <div class="mt-auto">
+                <button onclick="window.print()" class="btn btn-primary w-100 py-3 fw-bold rounded-4 shadow btn-print-hide">
+                    <i class="bi bi-printer me-2"></i>Print Analysis
+                </button>
+            </div>
+        </aside>
+
+        <main class="analytics-main">
+            <div class="row g-4">
+                
+                <div class="col-12">
+                    <div class="stat-card border-0">
+                        <div class="row align-items-center">
+                            <div class="col-md-5 border-md-end">
+                                <div class="score-display-container">
+                                    <label class="text-muted fw-bold small text-uppercase mb-4 d-block">Total Feasibility Index</label>
+                                    <div class="score-circle">
+                                        <h1 style="color: {{ f_col }};">{{ final_score }}%</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7 ps-md-5">
+                                <div class="insight-highlight">
+                                    <h5 class="fw-bold text-primary mb-3"><i class="bi bi-cpu-fill me-2"></i>AI Quick Insight</h5>
+                                    {% if final_score > 75 %}
+                                        <p class="mb-0 fs-6">🚀 <strong>Excellent:</strong> Strong demand and low competition detected. Your expertise in {{ skills }} gives you a significant edge here.</p>
+                                    {% elif final_score >= 55 %}
+                                        <p class="mb-0 fs-6">⚖️ <strong>Moderate:</strong> Market interest is steady, but success depends on differentiating your brand from {{ business_count }} rivals.</p>
+                                    {% else %}
+                                        <p class="mb-0 fs-6">⚠️ <strong>Risk Alert:</strong> Either demand is low or the market is oversaturated. Re-evaluate the location or business model.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <a href="https://www.justdial.com/{{ location }}/{{ domain | lower }}-services" target="_blank" class="jd-link-card">
+                        <div>
+                            <h4 class="fw-800 mb-1">Verify on JustDial India</h4>
+                            <p class="mb-0 opacity-90">Explore the {{ business_count }} businesses we found in live local listings.</p>
+                        </div>
+                        <i class="bi bi-arrow-up-right-circle display-6"></i>
+                    </a>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <h6 class="fw-bold text-muted text-uppercase small">Competition</h6>
+                            <span class="pill-badge bg-light text-primary border">{{ business_count }} Rivals</span>
+                        </div>
+                        <h2 class="fw-800 mb-2">{{ business_count }}</h2>
+                        <p class="text-muted small">Establishments within given radius.</p>
+                        
+                        {% if business_count < 20 %} {% set c_len = 25 %} {% set c_bg = "bg-success" %}
+                        {% elif business_count < 50 %} {% set c_len = 60 %} {% set c_bg = "bg-warning" %}
+                        {% else %} {% set c_len = 95 %} {% set c_bg = "bg-danger" %} {% endif %}
+                        
+                        <div class="progress progress-custom mt-4">
+                            <div class="progress-bar {{ c_bg }}" style="width: {{ c_len }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="stat-card">
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <h6 class="fw-bold text-muted text-uppercase small">Market Demand</h6>
+                            <span class="pill-badge bg-primary text-white">Live Trends</span>
+                        </div>
+                        <h2 class="fw-800 mb-2">{{ demand_score }}%</h2>
+                        <p class="text-muted small">Search volume trends for {{ domain }} in {{ location }}.</p>
+                        
+                        <div class="progress progress-custom mt-4">
+                            {% if demand_score < 40 %} {% set d_bg = "bg-danger" %}
+                            {% elif demand_score < 70 %} {% set d_bg = "bg-warning" %}
+                            {% else %} {% set d_bg = "bg-success" %} {% endif %}
+                            <div class="progress-bar {{ d_bg }} progress-bar-striped progress-bar-animated" style="width: {{ demand_score }}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="stat-card">
+                        <h6 class="fw-bold text-muted mb-4 text-uppercase small">Public Sentiment</h6>
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <h1 class="fw-800 mb-0" style="font-size: 3rem;">{{ sentiment_score }}%</h1>
+                            </div>
+                            <div class="col ms-4">
+                                <div class="progress progress-custom">
+                                    {% if sentiment_score < 40 %} {% set s_bg = "bg-danger" %}
+                                    {% elif sentiment_score < 70 %} {% set s_bg = "bg-warning" %}
+                                    {% else %} {% set s_bg = "bg-success" %} {% endif %}
+                                    <div class="progress-bar {{ s_bg }}" style="width: {{ sentiment_score }}%"></div>
+                                </div>
+                                <p class="text-muted small mt-2 mb-0">Calculated via VADER AI sentiment engine on local domain feedback.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    
+
+</body>
+</html>
