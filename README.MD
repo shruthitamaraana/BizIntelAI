@@ -90,8 +90,8 @@ BizIntel-AI/
 │── data/
 │── requirements.txt
 │── README.md
----
 ```
+---
 ## ⚙️ Installation
 ```bash
 git clone https://github.com/your-username/BizIntel-AI.git
